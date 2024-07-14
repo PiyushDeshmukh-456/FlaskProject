@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-DOOSYLC9vI8sjt2TYW0KqNKnXWt9IMzJ06FFAwso+rvj9y0NBmm9BMQcYlv7H0Gm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://res.cloudinary.com/dmwvqrxw9/raw/upload/v1660463590/footer_h3zp7q.css" type="text/css">
+    <link rel="stylesheet" href="https://res.cloudinary.com/dmwvqrxw9/raw/upload/v1713763488/card_ybwxuq.css" type="text/css">
+    <link rel="stylesheet" href="https://res.cloudinary.com/dmwvqrxw9/raw/upload/v1713763785/cart_v8ror1.css" type="text/css">
+    <link rel="stylesheet" href="static/cart.css">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light" style="background-color: #50616d;">
+        <a class="navbar-brand" href="#" style="color:aliceblue; font-family: Times New Roman, Times, serif;">
+            <img src="https://res.cloudinary.com/dmwvqrxw9/image/upload/v1712836747/1_els0sx.png" alt="" width="30px" height="24px" style="border-radius: 50%;" class="d-inline-circle align-text-top">
+            <b>Kirana</b>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" style="color:aliceblue; font-family: Times New Roman, Times, serif;" href="{{ url_for('products_page') }}">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="color:aliceblue; font-family: Times New Roman, Times, serif;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for category in categories %}
+                            <a class="dropdown-item" href="{{ url_for('products_page', category_id=category.category_id) }}">{{ category.category_name }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+            </ul>
+            {% if 'user_id' in session %}
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:aliceblue; font-family: Times New Roman, Times, serif;">Welcome {{ session['username'] }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:aliceblue; font-family: Times New Roman, Times, serif;" href="{{ url_for('cart_page') }}">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:aliceblue; font-family: Times New Roman, Times, serif;" href="{{ url_for('order_history') }}">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:aliceblue; font-family: Times New Roman, Times, serif;" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                </ul>
+            {% else %}
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}" style="color:aliceblue; font-family: Times New Roman, Times, serif;">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}" style="color:aliceblue; font-family: Times New Roman, Times, serif;">Register</a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+    </nav>
+    
+    
+<style>
+    .product-quantity-container {
+        align: left:
+        justify-content: flex-end
+        align-items: center;
+        margin-bottom: 10px; /* Adjust spacing as needed */
+      }
+      
+      .product-quantity-container input[type="number"] {
+        width: 50px; /* Adjust width as needed */
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        text-align: right;
+        margin-right: 60px; /* Adjust spacing as needed */
+        background-color: #f5f5f5; /* Light background for better contrast */
+        transition: all 0.2s ease-in-out;
+      }
+      
+      .product-quantity-container input[type="number"]:focus {
+        outline: none;
+        border-color: #2ECC71; /* Green border on focus */
+        box-shadow: 0 0 3px rgba(0, 153, 102, 0.2); /* Subtle green shadow */
+      }
+      
+      .product-quantity-container label {
+        font-size: 16px;
+        color: #333; /* Adjust text color as needed */
+      }
+      function filterByCategory(category) {
+        // Make an AJAX request to Flask route to get filtered products
+        $.ajax({
+            type: 'POST',
+            url: '/filter_by_category',
+            data: JSON.stringify({ category: category }),
+            contentType: 'application/json',
+            success: function(response) {
+                // Update the product list on the page with the filtered products
+                // Assuming you have a function to update the product list, e.g., updateProductList()
+                updateProductList(response.products);
+            },
+            error: function(error) {
+                console.error('Error filtering products:', error);
+            }
+        });
+    }
+    </style>
+    
+
+
+    <div class="container-fluid">
+        <div class="row">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-tumb">
+                    <img src="data:image/jpeg;base64,{{ product.image }}" alt="Product Image">
+                </div>
+                       <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="POST">
+                        <div class="product-details">
+                            <span class="product-catagory">{{ product.name }}
+                            <div class="product-quantity-container">
+                                <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                                  <input type="number" name="quantity" value="1" min="1" max="10">
+                              </div>
+                            </span>
+                            <div class="product-bottom-details">
+                                <div class="product-price">{{ product.price_per_unit }}</div>
+                                <div class="product-links">
+                                        <button type="submit" class="button-86" role="button">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+
+
+
+
+
+    
+    
+
+    <script>
+        function increaseQuantity(productId) {
+            var quantityField = document.getElementById('quantity' + productId); // Change ID to 'quantity' + productId
+            if (quantityField.value < 10) {  // Limit maximum quantity to 10
+                quantityField.value++;
+                calculateTotal(productId, document.getElementById('price_' + productId).innerText);
+            }
+        }
+        
+        function decreaseQuantity(productId) {
+            var quantityField = document.getElementById('quantity' + productId); // Change ID to 'quantity' + productId
+            if (quantityField.value > 1) {
+                quantityField.value--;
+                calculateTotal(productId, document.getElementById('price_' + productId).innerText);
+            }
+        }
+        
+        function calculateTotal(productId, pricePerUnit) {
+            var quantity = document.getElementById('quantity' + productId).value; // Change ID to 'quantity' + productId
+            var totalPrice = quantity * parseFloat(pricePerUnit);
+            document.getElementById('total_' + productId).innerText = totalPrice.toFixed(2);
+        }
+        function addToCart(productId) {
+            var quantity = document.getElementById("quantity" + productId).value;
+            var url = "/add_to_cart/" + productId + "?quantity=" + quantity;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        alert("Product added to cart successfully!");
+                    } else {
+                        alert("Failed to add product to cart.");
+                    }
+                }
+            };
+            xhr.send();
+        }
+        
+    </script>
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Bootstrap and other JS libraries -->
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <footer class="footer">
+        <div class="container">
+           <div class="row">
+              <div class="footer-col">
+                 <h4>Shoeville</h4>
+                 <ul>
+                    <li><a href="#">about us</a></li>
+                 </ul>
+              </div>
+              <div class="footer-col">
+                 <h4>Site Location</h4>
+                 <ul>
+                    <li><a href="https://www.google.co.in/maps/place/Urvashi+Apartments/@18.654858,72.885764,18.5z/data=!4m8!1m2!2m1!1ssahyadri+hotel+alibaug!3m4!1s0x3be87b7cb0095807:0x960d8404e2c61af5!8m2!3d18.6548918!4d72.8872383?hl=en" target="_blank">Near RCF gate <br> Dali nagar Veshwi<br>Alibag-402201</a></li>
+                 </ul>
+              </div>
+              <div class="footer-col">
+                 <h4>online shop</h4>
+                 <ul>
+                    <li>Bhaji</li>
+               <li>Fal</li>
+               <li>Barach kahi</li>
+               <li>Ajun barach kahi</li>
+                 </ul>
+              </div>
+              <div class="footer-col">
+                 <h4>Contact us</h4>
+                 <div class="social-links">
+                    <a href="https://wa.me/919373931357" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/piyush.deshmukh.501151" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/Piyush_D07" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/piyush.deshmukh_/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/piyush-deshmukh-717a13237/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                 </div>
+              </div>
+           </div>
+        </div>
+        <br>
+        <footer class="w3-center">
+           <a href="#home" class="w3-button w3-white"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+        </footer>
+</body>
+</html>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LogIn</title>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
+  <link rel="stylesheet" href="static/lr.css">
+  <link rel="stylesheet" href="static/button.css">
+  <link rel="icon" href="https://res.cloudinary.com/dmwvqrxw9/image/upload/v1678590761/logo_jlgxeb.jpg">
+</head>
+<body>
+    <style>
+        p {
+             margin: 0; /* Remove default margin */
+             font-size: 16px; /* Adjust font size as needed */
+             color: #333; /* Dark gray text color */
+             }
+
+            a {
+            color: #2e8b57; /* Dark green link color */
+            text-decoration: none; /* Remove underline */
+            font-weight: bold; /* Bold text for emphasis */
+            transition: color 0.3s ease-in-out; /* Smooth color transition on hover */
+            }
+
+            a:hover {
+            color: #008000; /* Darker green on hover */
+            }
+    </style>
+    
+    {% if error %}
+    <script>
+        showMessage("{{ error }}");
+    </script>
+    {% endif %}
+    
+    <form method="post">
+        <div class="container">
+            <div class="screen">
+                <div class="screen__content">
+                    <div class="login"> <!-- Removed nested form tag -->
+                        <div class="login__field">
+                            <i class="login__icon fas fa-user"></i>
+                            <input type="text" id='username' name='username' class="login__input" placeholder="User name / Email">
+                        </div>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-lock"></i>
+                            <input type="password" id='password' name='password' class="login__input" placeholder="Password">
+                        </div><br>
+                        <button class="button-49" role="button">Submit</button>
+                        <br><br>
+                        <p>Don't have an account? <a href="/register">Register here</a>.</p>				
+                    </div>
+                </div>
+                <div class="screen__background">
+                    <span class="screen__background__shape screen__background__shape4"></span>
+                    <span class="screen__background__shape screen__background__shape3"></span>		
+                    <span class="screen__background__shape screen__background__shape2"></span>
+                    <span class="screen__background__shape screen__background__shape1"></span>
+                </div>		
+            </div>
+        </div>
+    </form>
+  <!-- JavaScript function definition moved to the bottom -->
+  <script>
+      function showMessage(message) {
+          alert(message);
+      }
+  </script>
+</body>
+</html>

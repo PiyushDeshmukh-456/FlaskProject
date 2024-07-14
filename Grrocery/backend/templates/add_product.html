@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="static/button.css"> <!-- Link to your CSS file -->
+</head>
+<style>
+.heading {
+    color: #008000; /* Green color */
+}
+
+/* Apply styles to the labels */
+.label {
+    color: #008000; /* Green color */
+}
+
+/* Apply styles to the input fields */
+.input {
+    border: 2px solid #008000; /* Green border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px; /* Padding */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+    margin-bottom: 10px; /* Bottom margin */
+}
+
+/* Apply styles to the button */
+.button-49 {
+    background-color: #008000; /* Green background color */
+    border: none; /* No border */
+    color: white; /* White text color */
+    padding: 15px 32px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Display as inline block */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+}
+</style>
+
+<body>
+    <h1 class="heading">Add Product</h1> <!-- Added a class for the heading -->
+    <form action="{{ url_for('add_product') }}" method="post" enctype="multipart/form-data">
+        <label for="product_name" class="label">Product Name:</label><br> <!-- Added a class for the label -->
+        <input type="text" id="product_name" name="product_name" class="input" required><br><br> <!-- Added a class for the input -->
+        <label for="uom_id" class="label">UOM ID:</label><br> <!-- Added a class for the label -->
+        <input type="text" id="uom_id" name="uom_id" class="input" required><br><br> <!-- Added a class for the input -->
+        <label for="price_per_unit" class="label">Price per Unit:</label><br> <!-- Added a class for the label -->
+        <input type="text" id="price_per_unit" name="price_per_unit" class="input" required><br><br> <!-- Added a class for the input -->
+        <label for="category" class="label">Category:</label><br>
+          <select id="category" name="category_id" class="input" required>
+           {% for category in categories %}
+              <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+           {% endfor %}
+          </select><br><br>
+        <input type="file" name="image" accept="image/*" required><br><br> <!-- No class added for file input -->
+        <button class="button-49" role="button">Submit</button> <!-- Added a class for the button -->
+    </form>
+</body>
+</html>

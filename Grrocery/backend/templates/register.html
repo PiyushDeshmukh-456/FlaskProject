@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="static/lr.css">
+  <link rel="stylesheet" href="static/register.css">
+</head>
+<body>   
+    {% if error %}
+    <script>
+        showMessage("{{ error }}");
+    </script>
+    {% endif %}
+    <form method="post" action="/register">
+        <div class="container">
+            <div class="screen">
+                <div class="screen__content">
+                    <div class="login"> 
+                        <div class="login__field">
+                            <i class="login__icon fas fa-user"></i>
+                            <input type="text" id='username' name='username' class="login__input" placeholder="User name" required>
+                        </div>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-lock"></i>
+                            <input type="password" id='password' name='password' class="login__input" placeholder="Password" required>
+                        </div>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-lock"></i>
+                            <input type="email" id='email' name='email' class="login__input" placeholder="Email" required>
+                        </div><br>
+                        <button class="button-49" role="button">Register</button>
+                    </div>
+                </div>
+                <div class="screen__background">
+                    <span class="screen__background__shape screen__background__shape4"></span>
+                    <span class="screen__background__shape screen__background__shape3"></span>		
+                    <span class="screen__background__shape screen__background__shape2"></span>
+                    <span class="screen__background__shape screen__background__shape1"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p>Don't have an account? <a href="/register">Register here</a>.</p>
+  <script>
+      function showMessage(message) {
+          alert(message);
+      }
+  </script>
+</body>
+</html>
